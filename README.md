@@ -7,7 +7,7 @@
 [![DBeaver](https://img.shields.io/badge/DBeaver-25.2.0-orange?logo=dbeaver\&logoColor=white)](https://dbeaver.io/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
-Projeto de **CRUD (Create, Read, Update, Delete)** completo em PHP, seguindo o padrão **MVC**, com banco **PostgreSQL** e interface moderna com **Tailwind CSS**.
+Projeto de **CRUD (Create, Read, Update, Delete)** completo em PHP, seguindo o padrão **MVC**, com banco **PostgreSQL**, interface moderna com **Tailwind CSS** e proteção **CSRF**.
 Ideal para uso com **VSCode** e **DBeaver**.
 
 ---
@@ -17,11 +17,12 @@ Ideal para uso com **VSCode** e **DBeaver**.
 * PHP 7.x ou 8.x
 * PostgreSQL
 * Tailwind CSS (via CDN moderna)
-* VSCode como editor de código
-* DBeaver para gerenciamento do banco
 * PDO para acesso seguro ao banco de dados
 * MVC (Model-View-Controller)
-* Servidor local (PHP nativo ou XAMPP)
+* FastRoute (roteamento leve e performático)
+* Dotenv (configuração via `.env`)
+* Logger personalizado
+* Proteção CSRF (Cross-Site Request Forgery)
 
 ---
 
@@ -31,6 +32,7 @@ Ideal para uso com **VSCode** e **DBeaver**.
 * Adicionar novo usuário
 * Editar usuário existente
 * Deletar usuário
+* Proteção CSRF em todos os formulários
 
 ---
 
@@ -39,38 +41,61 @@ Ideal para uso com **VSCode** e **DBeaver**.
 ```
 crud-completo-php/
 │
-├── app/
-│   ├── controllers/
-│   │   └── UsuarioController.php
-│   ├── models/
-│   │   └── Usuario.php
-│   └── views/
-│       └── usuario/
-│           ├── index.php
-│           ├── criar.php
-│           └── editar.php
+├─ app/
+│  ├─ Config/
+│  │   └─ Database.php
+│  ├─ Controllers/
+│  │   └─ UsuarioController.php
+│  ├─ Core/
+│  │   ├─ Router.php
+│  │   ├─ View.php
+│  │   ├─ Validator.php
+│  │   ├─ Logger.php
+│  │   └─ Csrf.php
+│  ├─ Models/
+│  │   └─ Usuario.php
+│  └─ Repositories/
+│      └─ UsuarioRepository.php
 │
-├── config/
-│   └── Database.php
-├── public/
-│   ├── index.php
-│   └── assets/
-└── README.md
+├─ public/
+│  └─ index.php
+│
+├─ views/
+│  ├─ usuario/
+│  │   ├─ criar.php
+│  │   ├─ editar.php
+│  │   └─ index.php
+│  └─ errors/
+│      ├─ 404.php
+│      ├─ 405.php
+│      └─ 500.php
+│
+├─ .env
+├─ .env.example
+├─ .gitignore
+├─ composer.lock
+├─ composer.json
+├─ vendor/
+└─ README.md
 ```
 
 ---
 
 ## Instalação e Configuração
 
-1. Clone o repositório no VSCode:
+1. Clone o repositório:
 
 ```bash
 git clone https://github.com/seu-usuario/crud-completo-php.git
 ```
 
-2. Abra o projeto no VSCode.
+2. Instale as dependências:
 
-3. Crie o banco de dados no **PostgreSQL** usando **DBeaver**:
+```bash
+composer install
+```
+
+3. Crie o banco de dados no **PostgreSQL**:
 
 ```sql
 CREATE DATABASE crud_completo;
@@ -84,16 +109,19 @@ CREATE TABLE usuarios (
 );
 ```
 
-4. Configure a conexão em `config/Database.php`:
+4. Configure o arquivo `.env` na raiz do projeto:
 
-```php
-private $host = "localhost";
-private $db_name = "crud_completo";
-private $username = "postgres"; // seu usuário
-private $password = "sua_senha"; // sua senha
+```env
+APP_ENV=development
+DB_CONNECTION=pgsql
+DB_HOST=localhost
+DB_PORT=5432
+DB_DATABASE=crud_completo
+DB_USERNAME=postgres
+DB_PASSWORD=sua_senha
 ```
 
-5. Abra o terminal do VSCode e rode o servidor PHP:
+5. Rode o servidor embutido do PHP:
 
 ```bash
 php -S localhost:8080 -t public
@@ -107,26 +135,40 @@ http://localhost:8080/
 
 ---
 
-## Como usar
+## CSRF (Cross-Site Request Forgery)
 
-* **Listar usuários:** Página inicial
-* **Criar usuário:** Clique em “Adicionar Usuário”
-* **Editar usuário:** Clique em “Editar” ao lado do usuário
-* **Deletar usuário:** Clique em “Excluir” e confirme
+O projeto implementa proteção **CSRF** para todos os formulários.
+
+### Como funciona:
+
+* Um token é gerado e armazenado na sessão (`Csrf::generateToken()`).
+* Esse token é incluído em todos os formulários como campo oculto (`Csrf::inputField()`).
+* O Controller valida o token em cada requisição POST (`Csrf::validateToken()`).
+
+### Exemplo no formulário:
+
+```php
+<form action="/usuarios" method="POST">
+    <?= \App\Core\Csrf::inputField(); ?>
+    <!-- campos do formulário -->
+</form>
+```
 
 ---
 
 ## Boas práticas implementadas
 
 * Estrutura **MVC** para separar lógica, dados e interface
-* **PDO + prepared statements** (evita SQL Injection)
-* Uso de `__DIR__` para incluir arquivos de forma segura
-* Interface moderna e responsiva com **Tailwind CSS 3.x via CDN**
-* Views totalmente estilizadas e consistentes
-* Rotas simples usando query string (`?acao=index`, `?acao=criar`, etc.)
+* **PDO + prepared statements** para evitar SQL Injection
+* Configuração centralizada via **.env** (com `vlucas/phpdotenv`)
+* Roteamento limpo com **FastRoute**
+* **CSRF token** em todos os formulários (segurança contra ataques)
+* Views com **Tailwind CSS 3.x**
+* Logger de erros personalizado
 
 ---
 
 ## Contribuição
 
-Contribuições são bem-vindas! Crie **issues** ou **pull requests**.
+Contribuições são bem-vindas!
+Abra uma **issue** ou envie um **pull request**.
