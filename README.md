@@ -217,9 +217,3 @@ Configurar um Virtual Host permite que você acesse seu projeto por uma URL amig
 ## 🤝 Contribuição
 
 Contribuições são muito bem-vindas\! Sinta-se à vontade para abrir uma **issue** para relatar um bug ou sugerir uma melhoria, ou enviar um **pull request** com suas alterações.
-
------
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](https://www.google.com/search?q=LICENSE) para mais detalhes.
