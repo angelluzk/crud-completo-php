@@ -1,30 +1,39 @@
 <?php
 namespace App\Core;
 
-/**
- * View renderer simples.
- * Método de instância (não estático) para permitir injeção e testes.
- */
 class View
 {
-    /**
-     * Renderiza a view (extrai $data para variáveis).
-     *
-     * @param string $view Caminho relativo dentro de views/ (ex: 'usuario/index')
-     * @param array $data Dados a serem extraídos
-     *
-     * @throws \RuntimeException se a view não existir
-     */
+    protected string $layout = 'app';
+
+    public function setLayout(string $layout): self
+    {
+        $this->layout = $layout;
+        return $this;
+    }
+
     public function render(string $view, array $data = []): void
     {
-        extract($data, EXTR_SKIP);
-        $file = __DIR__ . '/../../views/' . $view . '.php';
-
-        if (!file_exists($file)) {
+        $viewFile = __DIR__ . '/../../views/' . $view . '.php';
+        if (!file_exists($viewFile)) {
             throw new \RuntimeException("View não encontrada: {$view}");
         }
 
-        require $file;
+        $layoutFile = __DIR__ . '/../../views/layout/' . $this->layout . '.php';
+        if (!file_exists($layoutFile)) {
+            throw new \RuntimeException("Layout não encontrado: {$this->layout}");
+        }
+        
+        ob_start();
+        extract($data, EXTR_SKIP);
+        require $viewFile;
+        $content = ob_get_clean();
+
+        require $layoutFile;
+    }
+
+    public function e(?string $data): string
+    {
+        return htmlspecialchars($data ?? '', ENT_QUOTES, 'UTF-8');
     }
 }
 ?>

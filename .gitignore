@@ -1,13 +1,18 @@
+# Dependencies
 /vendor/
+
+# Environment
 /.env
-/.idea/
-/.vscode/
-/storage/
-/public/uploads/
-/node_modules/
-/.DS_Store
 .env.local
 .env.*.local
-app.cache
-app.log
-composer.lock
+
+# IDEs
+/.idea/
+/.vscode/
+
+# Logs, Cache, and Storage
+/storage/
+/cache/
+
+# macOS
+.DS_Store

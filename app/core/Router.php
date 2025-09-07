@@ -1,28 +1,34 @@
 <?php
 namespace App\Core;
 
-use FastRoute\RouteCollector;
-use function FastRoute\simpleDispatcher;
+use function FastRoute\cachedDispatcher;
+use FastRoute\Dispatcher;
 
-/**
- * Router wrapper para registrar rotas de forma limpa e despachar.
- */
 class Router
 {
+    /** @var callable */
     private $routesCallback;
+    private ?Dispatcher $dispatcher = null;
 
     public function __construct(callable $routesCallback)
     {
         $this->routesCallback = $routesCallback;
     }
 
-    /**
-     * @return array Resultado do dispatch do FastRoute
-     */
     public function dispatch(string $httpMethod, string $uri): array
     {
-        $dispatcher = simpleDispatcher($this->routesCallback);
-        return $dispatcher->dispatch($httpMethod, $uri);
+        if ($this->dispatcher === null) {
+            $cacheFile = __DIR__ . '/../../storage/cache/route.cache';
+            
+            $options = [
+                'cacheFile'     => $cacheFile,
+                'cacheDisabled' => ($_ENV['APP_ENV'] ?? 'production') === 'development',
+            ];
+
+            $this->dispatcher = cachedDispatcher($this->routesCallback, $options);
+        }
+
+        return $this->dispatcher->dispatch($httpMethod, $uri);
     }
 }
 ?>

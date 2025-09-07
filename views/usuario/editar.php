@@ -1,38 +1,36 @@
-<!doctype html>
-<html lang="pt-br">
-<head>
-  <meta charset="utf-8">
-  <title>Editar Usuário</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
-  <div class="max-w-md mx-auto bg-white p-6 rounded shadow">
-    <h1 class="text-2xl font-bold mb-4">Editar Usuário</h1>
+<?php
+$titulo = 'Editar Usuário';
+$errors = $errors ?? [];
+$old = $old ?? [];
+?>
 
-    <?php if (!empty($_SESSION['errors'])): ?>
-      <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
-        <?php foreach ($_SESSION['errors'] as $err): ?>
-          <div><?= htmlspecialchars($err) ?></div>
-        <?php endforeach; unset($_SESSION['errors']); ?>
-      </div>
-    <?php endif; ?>
+<h1 class="text-3xl font-bold mb-6 text-gray-800">Editando: <?= $this->e($usuario->getNome()) ?></h1>
 
-    <form action="/usuarios/atualizar/<?= htmlspecialchars($usuario['id']); ?>" method="POST" class="space-y-4" novalidate>
-      <?= \App\Core\Csrf::inputField() ?>
-      <div>
-        <label for="nome" class="block mb-1 font-semibold">Nome</label>
-        <input id="nome" type="text" name="nome" value="<?= htmlspecialchars($_SESSION['old']['nome'] ?? $usuario['nome']) ?>" class="w-full border p-2 rounded" required>
-      </div>
-      <div>
-        <label for="email" class="block mb-1 font-semibold">Email</label>
-        <input id="email" type="email" name="email" value="<?= htmlspecialchars($_SESSION['old']['email'] ?? $usuario['email']) ?>" class="w-full border p-2 rounded" required>
-      </div>
-      <div>
-        <button type="submit" class="px-4 py-2 bg-yellow-500 text-white rounded">Atualizar</button>
-        <a href="/usuarios" class="ml-2 text-sm text-gray-600">Cancelar</a>
-      </div>
-    </form>
-  </div>
-</body>
-</html>
+<form action="<?= rtrim($_ENV['APP_URL'], '/') ?>/usuarios/atualizar/<?= $this->e($usuario->getId()) ?>" method="POST" class="space-y-6">
+    <?= App\Core\Csrf::inputField() ?>
+
+    <div>
+        <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
+        <div class="mt-1">
+            <input type="text" id="nome" name="nome" value="<?= $this->e($old['nome'] ?? $usuario->getNome()) ?>" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+        </div>
+        <?php if (isset($errors['nome'])): ?>
+            <p class="mt-2 text-sm text-red-600"><?= $this->e($errors['nome']) ?></p>
+        <?php endif; ?>
+    </div>
+
+    <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+        <div class="mt-1">
+            <input type="email" id="email" name="email" value="<?= $this->e($old['email'] ?? $usuario->getEmail()) ?>" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+        </div>
+        <?php if (isset($errors['email'])): ?>
+            <p class="mt-2 text-sm text-red-600"><?= $this->e($errors['email']) ?></p>
+        <?php endif; ?>
+    </div>
+
+    <div class="flex items-center space-x-4">
+        <button type="submit" class="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-md transition-colors">Atualizar</button>
+        <a href="<?= rtrim($_ENV['APP_URL'], '/') ?>/usuarios" class="inline-block px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-md transition-colors">Cancelar</a>
+    </div>
+</form>
