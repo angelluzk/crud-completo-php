@@ -5,7 +5,6 @@
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.x-teal?logo=tailwindcss\&logoColor=white)](https://tailwindcss.com/)
 [![VSCode](https://img.shields.io/badge/VSCode-1.x-blueviolet?logo=visual-studio-code\&logoColor=white)](https://code.visualstudio.com/)
 [![DBeaver](https://img.shields.io/badge/DBeaver-25.2.0-orange?logo=dbeaver\&logoColor=white)](https://dbeaver.io/)
-[![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
 Um projeto de **CRUD (Create, Read, Update, Delete)** de usuários, desenvolvido em PHP puro com uma arquitetura moderna e escalável. Utiliza o padrão **MVC**, Injeção de Dependência, Repositórios e um roteador performático para criar uma base sólida para aplicações web robustas e de fácil manutenção.
 
