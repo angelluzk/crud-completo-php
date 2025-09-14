@@ -216,3 +216,13 @@ Configurar um Virtual Host permite que você acesse seu projeto por uma URL amig
 ## 🤝 Contribuição
 
 Contribuições são muito bem-vindas\! Sinta-se à vontade para abrir uma **issue** para relatar um bug ou sugerir uma melhoria, ou enviar um **pull request** com suas alterações.
+
+### ✍️ Autor
+
+> Desenvolvido com 💛 por **Angel Luz**
+
+Se quiser conversar, colaborar ou oferecer uma oportunidade:
+
+📬 E-mail: [contatoangelluz@gmail.com](mailto:contatoangelluz@gmail.com)  
+🐙 GitHub: [@angelluzk](https://github.com/angelluzk)  
+💼 LinkedIn: [linkedin.com/in/angelitaluz](https://www.linkedin.com/in/angelitaluz/)
